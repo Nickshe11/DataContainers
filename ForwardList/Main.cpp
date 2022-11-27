@@ -36,8 +36,19 @@ public:
 	}
 	~ForwardList()
 	{
-		cout << "LDestructor:\t" << this << endl;
+		Element* Temp = Head;
+		Element* box = Temp;
+		int i = 0;
+		while (Temp)
+		{
+			Temp = Temp->pNext;
+			delete box;
+			box = Temp;
+			cout << "Deleted element # " << i << endl;
+			i++;
+		}
 
+		cout << "LDestructor:\t" << this << endl;
 	}
 	//Adding elements
 	void push_front(int Data)
@@ -106,7 +117,48 @@ public:
 		Temp->pNext = nullptr;
 		size--;
 	}
+	void erase(int Index)
+	{
+		if (Index > size)
+		{
+			cout << "Error: out of range" << endl;
+			return;
+		}
+		if (Index == size)return pop_back();
+		Element* erased = nullptr;
+		Element* Temp = Head;
+		for (int i = 0; i < Index - 2; i++)
+		{
+			Temp = Temp->pNext;
+		}
+		erased = Temp->pNext;
+		Temp->pNext = Temp->pNext->pNext;
+		delete erased;
+	}
+	ForwardList operator +(ForwardList& list1)
+	{
+		ForwardList Temp1;
+		Element* Temp = this->Head;
+		while (Temp->pNext)
+		{
+			Temp1.push_back(Temp->Data);
+			Temp = Temp->pNext;
+		}
+		Temp = list1.Head;
+		while (Temp->pNext)
+		{
+			Temp1.push_back(Temp->Data);
+			Temp = Temp->pNext;
+		}
+		return Temp1;
+	}
+	ForwardList operator =(ForwardList& list1)
+	{
+		this->Head=list1.Head;
+		return *this;
+	}
 	//Methods
+	
 	void print()const
 	{
 		Element* Temp = Head; //Temp - итератор
@@ -134,13 +186,29 @@ void main()
 		list.push_back(rand() % 100);
 	}
 	list.print();
+	cout << "__________________________" << endl;
 	/*list.push_back(123);
 	list.print();*/
 	//list.pop_back();
-	int index;
+	/*int index;
 	int value;
 	cout << "Введите индекс добавляемого элемента:"; cin >> index;
 	cout << "Введите значение:"; cin >> value;
 	list.insert(index, value);
 	list.print();
+	cout << "Введите индект удаляемого элемента:"; cin >> index;
+	list.erase(index);
+	list.print();*/
+	ForwardList list1;
+	for (int i = 0; i < n; i++)
+	{
+		//list.push_front(rand() % 100);
+		list1.push_back(rand() % 1000);
+	}
+	list1.print();
+	cout << "__________________________" << endl;
+	ForwardList list3 = list + list1;
+	cout << "__________________________" << endl;
+	list3.print();
+
 }
