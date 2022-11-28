@@ -18,12 +18,14 @@ public:
 		cout << "EDestructor:\t" << this << endl;
 	}
 	friend class ForwardList;
+	friend ForwardList operator +(ForwardList& list1, ForwardList& list2);
 };
 
 unsigned int Element::count = 0;//Статическую переменную можно проинициализировать только за пределами класса
 
 class ForwardList
 {
+protected:
 	Element* Head;//Указатель на начальный элемент списка
 	//Голова является точкой входа в список
 	unsigned int size;
@@ -135,7 +137,7 @@ public:
 		Temp->pNext = Temp->pNext->pNext;
 		delete erased;
 	}
-	ForwardList operator +(ForwardList& list1)
+	/*ForwardList operator +(ForwardList& list1)
 	{
 		ForwardList Temp1;
 		Element* Temp = this->Head;
@@ -151,7 +153,7 @@ public:
 			Temp = Temp->pNext;
 		}
 		return Temp1;
-	}
+	}*/
 	ForwardList operator =(ForwardList& list1)
 	{
 		this->Head=list1.Head;
@@ -172,7 +174,25 @@ public:
 		cout << "Количество элементов списка: " << size << endl;
 		cout << "Общее количество элементов списка: " << Head->count << endl;
 	}
+	friend ForwardList operator +(ForwardList& list1, ForwardList& list2);
 };
+/*ForwardList operator +(ForwardList& list1, ForwardList& list2)
+{
+	ForwardList Temp1;
+	Element* Temp = list1.Head;
+	while (Temp->pNext)
+	{
+		Temp1.push_back(Temp.Data);
+		Temp = Temp->pNext;
+	}
+	Temp = list1.Head;
+	while (Temp->pNext)
+	{
+		Temp1.push_back(Temp->Data);
+		Temp = Temp->pNext;
+	}
+	return Temp1;
+}*/
 
 void main()
 {
