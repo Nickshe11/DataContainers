@@ -206,11 +206,11 @@ void main()
 		list.push_back(rand() % 100);
 	}
 	list.print();
-	cout << "__________________________" << endl;
-	/*list.push_back(123);
-	list.print();*/
-	//list.pop_back();
-	/*int index;
+	/*cout << "__________________________" << endl;
+	list.push_back(123);
+	list.print();
+	list.pop_back();*/
+	int index;
 	int value;
 	cout << "Введите индекс добавляемого элемента:"; cin >> index;
 	cout << "Введите значение:"; cin >> value;
@@ -218,17 +218,17 @@ void main()
 	list.print();
 	cout << "Введите индект удаляемого элемента:"; cin >> index;
 	list.erase(index);
-	list.print();*/
-	ForwardList list1;
-	for (int i = 0; i < n; i++)
-	{
-		//list.push_front(rand() % 100);
-		list1.push_back(rand() % 1000);
-	}
-	list1.print();
-	cout << "__________________________" << endl;
-	ForwardList list3 = list + list1;
-	cout << "__________________________" << endl;
-	list3.print();
+	list.print();
+	//ForwardList list1;
+	//for (int i = 0; i < n; i++)
+	//{
+	//	//list.push_front(rand() % 100);
+	//	list1.push_back(rand() % 1000);
+	//}
+	//list1.print();
+	//cout << "__________________________" << endl;
+	//ForwardList list3 = list + list1;
+	//cout << "__________________________" << endl;
+	//list3.print();
 
 }
