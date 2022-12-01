@@ -18,13 +18,12 @@ public:
 		count--;
 		cout << "EDestructor:\t" << this << endl;
 	}
-	Element operator = (int i)
+	friend class ForwardList;
+	friend ForwardList operator+(const ForwardList& left, const ForwardList& right);
+	explicit operator int()
 	{
 		return this->Data;
 	}
-	friend class ForwardList;
-	friend ForwardList operator+(const ForwardList& left, const ForwardList& right);
-	
 };
 
 unsigned int Element::count = 0;//Статическую переменную можно проинициализировать только за пределами класса
@@ -217,18 +216,22 @@ public:
 		*this = box;
 		return *this;
 	}
-	auto begin() const
-	{
-		return this->Head;
-	}
-	auto end() const
+	Element* begin()
 	{
 		Element* Temp = Head;
-		while (Temp)Temp = Temp->pNext;
 		return Temp;
 	}
+	Element* end()
+	{
+		Element* Temp = Head;
+		while (Temp->pNext)Temp = Temp->pNext;
+		return Temp->pNext;
+	}
+	
 	friend ForwardList operator+(const ForwardList& left, const ForwardList& right);
 };
+
+
 
 ForwardList operator+(const ForwardList& left, const ForwardList& right)
 {
