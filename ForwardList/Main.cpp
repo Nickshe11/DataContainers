@@ -195,6 +195,18 @@ public:
 		cout << "Количество элементов списка: " << size << endl;
 		cout << "Общее количество элементов списка: " << Head->count << endl;
 	}
+	ForwardList reverse()
+	{
+		ForwardList box{};
+		Element* Temp = Head;
+		while (Temp)
+		{
+			box.push_front(Temp->Data);
+			Temp = Temp->pNext;
+		}
+		*this = box;
+		return *this;
+	}
 	friend ForwardList operator+(const ForwardList& left, const ForwardList& right);
 };
 
@@ -209,7 +221,7 @@ ForwardList operator+(const ForwardList& left, const ForwardList& right)
 //#define BASE_CHECK
 //#define COUNT_CHECK
 //#define RANGE_BASED_FOR_ARRAY
-#define RANGE_BASED_FOR_LIST
+//#define RANGE_BASED_FOR_LIST
 
 void main()
 {
@@ -268,6 +280,8 @@ void main()
 	ForwardList list3;
 	list3 = list1 + list2;
 	list3.print();
+	/*list1.reverse();
+	list1.print();*/
 
 #endif // COUNT_CHECK
 #ifdef RANGE_BASED_FOR_ARRAY
