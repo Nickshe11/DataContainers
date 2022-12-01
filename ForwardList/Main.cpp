@@ -18,6 +18,10 @@ public:
 		count--;
 		cout << "EDestructor:\t" << this << endl;
 	}
+	Element operator = (int i)
+	{
+		return this->Data;
+	}
 	friend class ForwardList;
 	friend ForwardList operator+(const ForwardList& left, const ForwardList& right);
 	
@@ -97,6 +101,7 @@ public:
 		cout << "MoveAssignment:\t" << this << endl;
 		return *this;
 	}
+	
 	//Adding elements
 	void push_front(int Data)
 	{
@@ -232,6 +237,8 @@ ForwardList operator+(const ForwardList& left, const ForwardList& right)
 		cat.push_back(Temp->Data);
 	return cat;
 }
+
+
 
 //#define BASE_CHECK
 //#define COUNT_CHECK
