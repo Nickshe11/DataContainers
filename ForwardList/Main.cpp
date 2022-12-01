@@ -20,6 +20,7 @@ public:
 	}
 	friend class ForwardList;
 	friend ForwardList operator+(const ForwardList& left, const ForwardList& right);
+	
 };
 
 unsigned int Element::count = 0;//Статическую переменную можно проинициализировать только за пределами класса
@@ -49,6 +50,13 @@ public:
 		*this = std::move(other);//функция std::move вызывает MoveAssignment
 		cout << "MoveConstructor:\t" << this << endl;
 	}
+	ForwardList(std::initializer_list<int> v)
+	{
+		for (int i : v)
+		{
+			this->push_back(i);
+		}
+	}
 	~ForwardList()
 	{
 		while (Head)pop_front();
@@ -65,9 +73,8 @@ public:
 
 		cout << "LDestructor:\t" << this << endl;
 	}
-
-
 	//Operators
+	
 	ForwardList& operator =(const ForwardList& other)
 	{
 		if (this == &other)return *this;//Проверяем, что принимаемый списко другой
@@ -90,8 +97,6 @@ public:
 		cout << "MoveAssignment:\t" << this << endl;
 		return *this;
 	}
-
-
 	//Adding elements
 	void push_front(int Data)
 	{
@@ -207,6 +212,16 @@ public:
 		*this = box;
 		return *this;
 	}
+	auto begin() const
+	{
+		return this->Head;
+	}
+	auto end() const
+	{
+		Element* Temp = Head;
+		while (Temp)Temp = Temp->pNext;
+		return Temp;
+	}
 	friend ForwardList operator+(const ForwardList& left, const ForwardList& right);
 };
 
@@ -221,7 +236,7 @@ ForwardList operator+(const ForwardList& left, const ForwardList& right)
 //#define BASE_CHECK
 //#define COUNT_CHECK
 //#define RANGE_BASED_FOR_ARRAY
-//#define RANGE_BASED_FOR_LIST
+#define RANGE_BASED_FOR_LIST
 
 void main()
 {
@@ -300,6 +315,7 @@ void main()
 #endif // RANGE_BASED_FOR_ARRAY
 #ifdef RANGE_BASED_FOR_LIST
 	ForwardList list = { 3,5,8,13,21 };
+	list.print();
 	for (int i : list)
 	{
 		cout << i << "\t";
