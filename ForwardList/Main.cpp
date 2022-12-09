@@ -30,38 +30,38 @@ public:
 
 	}
 	friend class ForwardList;
-	friend class Iterator;
+	friend class ConstIterator;
 	friend ForwardList operator+(const ForwardList& left, const ForwardList& right);
 	
 };
 
 unsigned int Element::count = 0;//Статическую переменную можно проинициализировать только за пределами класса
 
-class Iterator
+class ConstIterator
 {
 	Element* Temp;
 public:
-	Iterator(Element* Temp) : Temp(Temp)
+	ConstIterator(Element* Temp) : Temp(Temp)
 	{
 		cout << "ItConstructor:\t" << this << endl;
 	}
-	~Iterator()
+	~ConstIterator()
 	{
 		cout << "ItDestructor:\t" << this << endl;
 	}
 
-	Iterator& operator++()
+	ConstIterator& operator++()
 	{
 		Temp = Temp->pNext;
 		return *this;
 	}
 
-	bool operator==(const Iterator& other)const
+	bool operator==(const ConstIterator& other)const
 	{
 		return this->Temp == other.Temp;
 	}
 
-	bool operator!=(const Iterator& other)const
+	bool operator!=(const ConstIterator& other)const
 	{
 		return this->Temp != other.Temp;
 	}
@@ -83,11 +83,11 @@ protected:
 	//Голова является точкой входа в список
 	unsigned int size;
 public:
-	Iterator begin()
+	ConstIterator begin()
 	{
 		return Head;
 	}
-	Iterator end()
+	ConstIterator end()
 	{
 		return nullptr;
 	}
