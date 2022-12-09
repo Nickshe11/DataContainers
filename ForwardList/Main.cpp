@@ -1,5 +1,10 @@
 ﻿#include<iostream>
+#include <ctime>
 using namespace std;
+using std::cin;
+using std::cout;
+using std::endl;
+
 #define tab "\t"
 
 class Element
@@ -11,22 +16,65 @@ public:
 	Element(int Data, Element* pNext = nullptr) :Data(Data), pNext(pNext)
 	{
 		count++;
+#ifdef DEBUG
 		cout << "EConstructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	~Element()
 	{
 		count--;
+#ifdef DEBUG
 		cout << "EDestructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	friend class ForwardList;
+	friend class Iterator;
 	friend ForwardList operator+(const ForwardList& left, const ForwardList& right);
-	explicit operator int()
-	{
-		return this->Data;
-	}
+	
 };
 
 unsigned int Element::count = 0;//Статическую переменную можно проинициализировать только за пределами класса
+
+class Iterator
+{
+	Element* Temp;
+public:
+	Iterator(Element* Temp) : Temp(Temp)
+	{
+		cout << "ItConstructor:\t" << this << endl;
+	}
+	~Iterator()
+	{
+		cout << "ItDestructor:\t" << this << endl;
+	}
+
+	Iterator& operator++()
+	{
+		Temp = Temp->pNext;
+		return *this;
+	}
+
+	bool operator==(const Iterator& other)const
+	{
+		return this->Temp == other.Temp;
+	}
+
+	bool operator!=(const Iterator& other)const
+	{
+		return this->Temp != other.Temp;
+	}
+
+	const int& operator*()const
+	{
+		return Temp->Data;
+	}
+	int& operator*()
+	{
+		return Temp->Data;
+	}
+};
 
 class ForwardList
 {
@@ -35,11 +83,33 @@ protected:
 	//Голова является точкой входа в список
 	unsigned int size;
 public:
+	Iterator begin()
+	{
+		return Head;
+	}
+	Iterator end()
+	{
+		return nullptr;
+	}
+	// Constructors
 	ForwardList() :Head(nullptr), size(0)
 	{
 		//Конструктор по умолчанию создает пустой список
 		//Если голова указфвает на 0 то список пуст
 		cout << "LConstructor:\t" << this << endl;
+	}
+	ForwardList(const std::initializer_list<int>& il):ForwardList()
+	{
+		cout << typeid(il.begin()).name()<<endl;
+		for (int const* it = il.begin(); it != il.end(); it++)
+		{
+			push_back(*it);
+		}
+		
+		/*for (int i : il)
+		{
+			this->push_back(i);
+		}*/
 	}
 	ForwardList(const ForwardList& other) :ForwardList()
 	{
@@ -53,13 +123,7 @@ public:
 		*this = std::move(other);//функция std::move вызывает MoveAssignment
 		cout << "MoveConstructor:\t" << this << endl;
 	}
-	ForwardList(std::initializer_list<int> v)
-	{
-		for (int i : v)
-		{
-			this->push_back(i);
-		}
-	}
+	
 	~ForwardList()
 	{
 		while (Head)pop_front();
@@ -71,20 +135,19 @@ public:
 			Temp = Temp->pNext;
 			delete box;
 			box = Temp;
-
 		}*/
-
 		cout << "LDestructor:\t" << this << endl;
 	}
 	//Operators
-	
+
 	ForwardList& operator =(const ForwardList& other)
 	{
 		if (this == &other)return *this;//Проверяем, что принимаемый списко другой
 		while (Head)pop_front();//проверяем, что получающий список пустой
 		//deep copy
 		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
-			push_back(Temp->Data);
+			push_front(Temp->Data);
+		reverse();
 		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
 	}
@@ -100,7 +163,7 @@ public:
 		cout << "MoveAssignment:\t" << this << endl;
 		return *this;
 	}
-	
+
 	//Adding elements
 	void push_front(int Data)
 	{
@@ -204,7 +267,19 @@ public:
 		cout << "Количество элементов списка: " << size << endl;
 		cout << "Общее количество элементов списка: " << Head->count << endl;
 	}
-	ForwardList reverse()
+	void reverse()
+	{
+		ForwardList reverse;
+		while(Head)
+		{
+			reverse.push_front(Head->Data);
+			pop_front();
+		}
+		this->Head = reverse.Head;
+		this->size = reverse.size;
+		reverse.Head = nullptr;
+	}
+	/*ForwardList reverse()
 	{
 		ForwardList box{};
 		Element* Temp = Head;
@@ -215,19 +290,7 @@ public:
 		}
 		*this = box;
 		return *this;
-	}
-	Element* begin()
-	{
-		Element* Temp = Head;
-		return Temp;
-	}
-	Element* end()
-	{
-		Element* Temp = Head;
-		while (Temp->pNext)Temp = Temp->pNext;
-		return Temp->pNext;
-	}
-	
+	}*/
 	friend ForwardList operator+(const ForwardList& left, const ForwardList& right);
 };
 
@@ -247,6 +310,7 @@ ForwardList operator+(const ForwardList& left, const ForwardList& right)
 //#define COUNT_CHECK
 //#define RANGE_BASED_FOR_ARRAY
 #define RANGE_BASED_FOR_LIST
+//#define PERFORMANCE_CHECK
 
 void main()
 {
@@ -332,4 +396,27 @@ void main()
 	}
 	cout << endl;
 #endif //RANGE_BASED_FOR_LIST
+#ifdef PERFORMANCE_CHECK
+	int n;
+	cout << "Введите размер списка: "; cin >> n;
+	ForwardList list;
+	cout << "List created, loading data..." << endl;
+	time_t start = time(NULL);//time(NULL) получает текущее время в миллисекундах
+	for (int i = 0; i < n; i++)
+	{
+		list.push_front(rand() % 100);
+	}
+	time_t end = time(NULL);
+	cout << "Data load complete" << endl;
+	cout << "Spent time: " << end - start << endl;
+	//list.print();
+	cout << "Start copying" << endl;
+	start = time(NULL);
+	ForwardList list2 = list;
+	end = time(NULL);
+	cout << "End copying" << endl;
+	cout << "Spent time:" << end - start << endl;
+	//list2.print();  
+#endif // PERFORMANCE_CHECK
+
 }
