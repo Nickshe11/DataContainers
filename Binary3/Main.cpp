@@ -59,6 +59,31 @@ public:
 		cout << Root->Data << tab;
 		print(Root->pRight);
 	}
+	int minValue(Element* Root) const
+	{
+		if (Root->pLeft == nullptr)return Root->Data;
+		minValue(Root->pLeft);
+	}
+	int maxValue(Element* Root) const
+	{
+		if (Root->pRight == nullptr)return Root->Data;
+		maxValue(Root->pRight);
+	}
+	int sum(Element* Root) const
+	{
+		if (Root == nullptr)return 0;
+		return (Root->Data + sum(Root->pLeft) + sum(Root->pRight));
+	}
+	/*void erase(int value, Element* Root)
+	{
+		
+		if (Root->Data == value)
+		{
+			delete this->Root;
+			insert(Root->pLeft->Data, Root);
+		}
+		return;
+	}	*/
 };
 
 void main()
@@ -73,4 +98,11 @@ void main()
 	}
 	tree.print(tree.getRoot());
 	cout << endl;
+	cout << "Минимальное значение: " << tree.minValue(tree.getRoot()) << endl;
+	cout << "Максимальное значение: " << tree.maxValue(tree.getRoot()) << endl;
+	cout << "Сумма элементов: " << tree.sum(tree.getRoot()) << endl;
+	/*int value;
+	cout << "Введите удаляемое значение "; cin >> value;
+	tree.erase(value, tree.getRoot());
+	tree.print(tree.getRoot());*/
 }
