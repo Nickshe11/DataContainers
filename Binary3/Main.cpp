@@ -113,7 +113,7 @@ private:
 			else insert(Data, Root->pRight);
 		}
 	}
-	void erase(int Data, Element* Root)
+	void erase(int Data, Element*& Root)
 	{
 		if (Root == nullptr)return;
 		erase(Data, Root->pLeft);
@@ -272,6 +272,6 @@ void main()
 
 	int value;
 	cout << "Введите удаляемое значение: "; cin >> value;
-	//my_tree.erase(value);
+	my_tree.erase(value);
 	my_tree.print();
 }
