@@ -302,6 +302,23 @@ public:
 		Tail->pNext = nullptr;
 		size--;
 	}
+	void erase(int Index)
+	{
+		if (Index > size)
+		{
+			cout << "Error: out of range" << endl;
+			return;
+		}
+		if (Index == size)return pop_back();
+		if (Index == 1) return pop_front();
+		Element* Temp = Head;
+		for (int i = 0; i < Index-1; i++)Temp = Temp->pNext;
+		Temp->pPrev->pNext = Temp->pNext;
+		Temp->pNext->pPrev = Temp->pPrev;
+		delete Temp;
+		size--;
+		
+	}
 
 	//Methods
 	void print()const
@@ -380,7 +397,7 @@ void main()
 #endif // CONSTRUCTORS_CHECK
 
 	List list = { 3, 5, 8, 13, 21 };
-	for (int i : list)
+	/*for (int i : list)
 	{
 		cout << i << tab;
 	}
@@ -391,8 +408,13 @@ void main()
 	}
 	cout << endl;
 	List list2 = { 34,55,89 };
-	List list3 = list + list2;
+	List list3 = list + list2;*/
 	for (int i : list)cout << i << tab; cout << endl;
-	for (int i : list2)cout << i << tab; cout << endl;
-	for (int i : list3)cout << i << tab; cout << endl;
+	//for (int i : list2)cout << i << tab; cout << endl;
+	//for (int i : list3)cout << i << tab; cout << endl;
+	int index;
+	cout << "Введите индекс удаляемого значения: "; cin >> index;
+	list.erase(index);
+	for (int i : list)cout << i << tab; cout << endl;
+
 }
